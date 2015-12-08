@@ -434,24 +434,27 @@ int lgw_connect(void) {
 
     /* Detect if the gateway has an FPGA with SPI mux header support */
     /* First, we assume there is an FPGA, and try to read its version */
-    spi_stat = lgw_spi_r(lgw_spi_target, LGW_SPI_MUX_MODE1, LGW_SPI_MUX_TARGET_FPGA, loregs[LGW_VERSION].addr, &u);
+/*    spi_stat = lgw_spi_r(lgw_spi_target, LGW_SPI_MUX_MODE1, LGW_SPI_MUX_TARGET_FPGA, loregs[LGW_VERSION].addr, &u);
        if (spi_stat != LGW_SPI_SUCCESS) {
         DEBUG_MSG("ERROR READING VERSION REGISTER\n");
         return LGW_REG_ERROR;
     }
-    if (u != FPGA_VERSION) {
-        /* We failed to read expected FPGA version, so let's assume there is no FPGA */
+    if (u != FPGA_VERSION) {*/
+        // We failed to read expected FPGA version, so let's assume there is no FPGA */
         DEBUG_MSG("INFO: no FPGA detected\n");
         lgw_spi_mux_mode = LGW_SPI_MUX_MODE0;
-    } else {
+/*    } else {
         DEBUG_MSG("INFO: detected FPGA with SPI mux header\n");
         lgw_spi_mux_mode = LGW_SPI_MUX_MODE1;
     }
-
+*/
     /* check SX1301 version */
     spi_stat |= lgw_spi_r(lgw_spi_target, lgw_spi_mux_mode, LGW_SPI_MUX_TARGET_SX1301, loregs[LGW_VERSION].addr, &u);
     if (u != loregs[LGW_VERSION].dflt) {
         DEBUG_MSG("ERROR: NOT EXPECTED CHIP VERSION\n");
+	     printf("u=%d  \n", u);
+        printf("loregs.addr %d \n", loregs[LGW_VERSION].dflt);
+	
         return LGW_REG_ERROR;
     }
 
