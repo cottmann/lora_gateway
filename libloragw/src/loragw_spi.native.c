@@ -28,6 +28,8 @@ Maintainer: Sylvain Miermont
 #include <fcntl.h>        /* open */
 #include <string.h>        /* memset */
 
+#include <wiringPi.h> /* Raspberry PI GPIO access for reset pin toggle */
+
 #include <sys/ioctl.h>
 #include <linux/spi/spidev.h>
 
@@ -57,8 +59,24 @@ Maintainer: Sylvain Miermont
 #define SPI_DEV_PATH    "/dev/spidev0.0"
 //#define SPI_DEV_PATH    "/dev/spidev32766.0"
 
+#define RASPBERRY_PI_RESET_PIN 25
 /* -------------------------------------------------------------------------- */
 /* --- PUBLIC FUNCTIONS DEFINITION ------------------------------------------ */
+
+
+/* reset SX1301 from Raspberry Pi host. This function is not exported. */
+/* thanks to @rossihwang on github for this code */
+void reset_SX1301(){
+
+    wiringPiSetup();
+    pinMode(RASPBERRY_PI_RESET_PIN, OUTPUT); // You can use other pin
+    digitalWrite(RASPBERRY_PI_RESET_PIN, HIGH);
+    // Maybe need some delay here. Delay need to be more than 100ns.
+    digitalWrite(RASPBERRY_PI_RESET_PIN, LOW);
+    DEBUG_MSG("Note: Reset pin toggle ok\n");
+
+}
+
 
 /* SPI initialization and configuration */
 int lgw_spi_open(void **spi_target_ptr) {
@@ -66,6 +84,10 @@ int lgw_spi_open(void **spi_target_ptr) {
     int dev;
     int a=0, b=0;
     int i;
+
+
+    //reset the SX1301 (according to datasheet pin 13 is a reset pin)
+    reset_SX1301();
 
     /* check input variables */
     CHECK_NULL(spi_target_ptr); /* cannot be null, must point on a void pointer (*spi_target_ptr can be null) */

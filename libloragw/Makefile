@@ -14,7 +14,7 @@ CFLAGS := -O2 -Wall -Wextra -std=c99 -Iinc -I.
 
 ### linking options
 
-LIBS := -lloragw -lrt -lm
+LIBS := -lloragw -lrt -lm -lwiringPi
 
 ### general build targets
 
