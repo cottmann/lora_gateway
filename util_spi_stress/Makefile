@@ -28,7 +28,7 @@ LGW_INC += $(LGW_PATH)/inc/loragw_reg.h
 
 ### Linking options
 
-LIBS := -lloragw -lrt
+LIBS := -lloragw -lrt -lwiringPi
 
 ### General build targets
 
